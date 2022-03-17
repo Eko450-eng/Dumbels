@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+$black: rgba(0, 0, 0, 1);
+$oxford-blue: rgba(20, 33, 61, 1);
+$orange-web: rgba(252, 163, 17, 1);
+$platinum: rgba(229, 229, 229, 1);
+$white: rgba(255, 255, 255, 1);
+$gray: #c4c4c4;
+$jc: center;
+$ac: center;
+$fd: column;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@mixin flex($jc: $jc, $ac: $ac, $fd: $fd){
+    display:flex;
+    justify-content: $jc;
+    align-items: $ac;
+    flex-direction: $fd;
+}
+
+body{
+    @include flex();
+    font-family: "Montserrat";
+    color:white;
+    overflowX:hidden;
+    background:$oxford-blue;
+}
+
+.Welcome{
+    @include flex();
+}
+
+.btn{
+    color:black;
+    background:$gray;
+    border:none;
+    outline:none;
+    padding:1rem 2rem;
+    margin: 1rem;
+    border-radius:25px;
+}
+
+.btn_invisible{
+    @extend .btn;
+    background:none;
+    padding: 0rem;
+    color:white;
+    font-weight: bold;
+    font-size: 2rem;
+}
