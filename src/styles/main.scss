@@ -22,6 +22,11 @@ $fd: column;
     flex-direction: $fd;
 }
 
+@mixin reset(){
+    border:none;
+    outline:none;
+}
+
 body{
     @include flex();
     font-family: "Montserrat";
@@ -30,18 +35,28 @@ body{
     background:$oxford-blue;
 }
 
-.Welcome{
-    @include flex();
+.inputField{
+    @include reset;
+    border-radius: 15px;
+    padding:.25rem;
+    margin-bottom: .5rem;
+    &::placeholder{
+        text-align: center;
+    }
 }
 
 .btn{
+    @include reset;
     color:black;
     background:$gray;
-    border:none;
-    outline:none;
-    padding:1rem 2rem;
+    padding:.5rem 2rem;
     margin: 1rem;
     border-radius:25px;
+    cursor:pointer;
+    transition-duration: .3s;
+    &:hover{
+        transform: scale(1.3);
+    }
 }
 
 .btn_invisible{
@@ -51,4 +66,20 @@ body{
     color:white;
     font-weight: bold;
     font-size: 2rem;
+}
+
+.Welcome{
+    @include flex();
+}
+
+.Register{
+    Form{
+        @include flex();
+    }
+}
+
+.passWordInfoBox{
+    font-size: .4rem;
+    color:gray;
+    text-align: center;
 }
