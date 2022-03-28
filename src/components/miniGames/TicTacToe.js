@@ -4,13 +4,14 @@ import '../../styles/main.css';
 const socket = io('http://127.0.0.1:3001')
 
 function TicTacToe(){
-    const [turn, setTurn] = useState('');
     const [cells, setCells] = useState(Array(9).fill(''));
     const [winner, setWinner] = useState();
-    const [clicked , setClicked] = useState(false);
+    const [warning , setWarning] = useState(false);
+    const [warningMessage , setWarningMessage] = useState('');
     const [players, setPlayers] = useState([])
     const [myId, setMyId] = useState('');
     const [currentPlayer, setCurrentPlayer] = useState('');
+    const [myRole, setMyRole] = useState('');
 
     useEffect(() => {
         socket.on("players", (players)=>setPlayers(players))
@@ -19,10 +20,7 @@ function TicTacToe(){
     socket.on('currentPlayer', (player)=>{
         setCurrentPlayer(player)
     })
-
-    useEffect(() => {
-        console.log("Current",currentPlayer)
-    }, [currentPlayer]);
+    socket.on('roleAssigned', (role)=>setMyRole(role))
 
     const checkForWinner = (squares) => {
         let combos = {
@@ -60,33 +58,43 @@ function TicTacToe(){
         }
     };
 
+    const handleBoxes = (num, player) =>{
+        if (cells[num] !== '') {
+            setWarning(true);
+            setWarningMessage("Already clicked");
+            setTimeout(() => {
+                setWarning(false)
+                setWarningMessage("");
+            }, 2000);
+            return;
+        }
+
+        let squares = [...cells];
+        squares[num] = player;
+        checkForWinner(squares);
+        setCells(squares);
+    }
+
     const handleClick = (num) => {
         if(myId === currentPlayer){
             socket.emit("nextTurn", myId)
-            if (cells[num] !== '') {
-                setClicked(true);
-                setTimeout(() => {
-                    setClicked(false)
-                }, 2000);
-                return;
-            }
-    
-            let squares = [...cells];
-    
-            if (turn === 'x') {
-                squares[num] = 'x';
-                setTurn('o');
-            } else {
-                squares[num] = 'o';
-                setTurn('x');
-            }
-    
-            checkForWinner(squares);
-            setCells(squares);
+            socket.emit("clickedOn", [num, myId])
+
+            handleBoxes(num, myRole)
         }else{
-            console.log("Not your turn")
+            setWarning(true);
+            setWarningMessage("It's not your turn");
+            setTimeout(() => {
+                setWarning(false)
+                setWarningMessage("");
+            }, 2000);
         }
     };
+
+    socket.on("clickedOnThis",(num)=>{
+        let enemyRole = myRole == "x" ? "o" : "x"
+        handleBoxes(num, enemyRole)
+    })
 
     const handleRestart = () => {
         setWinner(null);
@@ -100,7 +108,6 @@ function TicTacToe(){
     return (
         <div className='container'>
             <table>
-                Turn: {turn}
                 <tbody>
                     <tr>
                         <Cell num={0} />
@@ -113,9 +120,9 @@ function TicTacToe(){
                         <Cell num={5} />
                     </tr>
                     <tr>
-                        <Cell num={8} />
                         <Cell num={6} />
                         <Cell num={7} />
+                        <Cell num={8} />
                     </tr>
                 </tbody>
             </table>
@@ -123,13 +130,13 @@ function TicTacToe(){
             <p>{winner} is the winner!</p>
             }
             {
-                clicked && <p>allReadyClicked</p>
+                warning && <p>{warningMessage}</p>
             }
             <button onClick={() => handleRestart()}>Play Again</button>
           <p>PlayerX: {players[0]}</p>
           <p>PlayerO: {players[1]}</p>
           <p>MyID: {myId}</p>
-          <p>Turn: {turn}</p>
+          <p>MyRole: {myRole}</p>
         </div>
     )
 }

@@ -25,10 +25,18 @@ socketServer.on('connection', (socket)=>{
   //Setting player roles
   if(userAmount < 1){
     playerX = socket.id
+    socket.emit("roleAssigned", "x")
   }else{
     playerO = socket.id
+    socket.emit("roleAssigned", "o")
   }
   userAmount++
+
+  // Sending the clicked blocks
+  socket.on("clickedOn", (arg)=>{
+    let enemy = playerX == arg[1] ? playerO : playerX
+    socketServer.to(enemy).emit('clickedOnThis', arg[0])
+  })
 
   //Sending playerlist and playerID
   socketServer.emit("players", [playerX, playerO])
