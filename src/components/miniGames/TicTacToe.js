@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client'
 import '../../styles/main.css';
+const socket = io('http://127.0.0.1:3001')
 
 function TicTacToe(){
-    const [turn, setTurn] = useState('x');
+    const [turn, setTurn] = useState('');
     const [cells, setCells] = useState(Array(9).fill(''));
     const [winner, setWinner] = useState();
     const [clicked , setClicked] = useState(false);
+    const [players, setPlayers] = useState([])
+    const [myId, setMyId] = useState('');
+    const [currentPlayer, setCurrentPlayer] = useState('');
 
+    useEffect(() => {
+        socket.on("players", (players)=>setPlayers(players))
+        socket.on('myId', (id)=>setMyId(id))
+    }, []);
+    socket.on('currentPlayer', (player)=>{
+        setCurrentPlayer(player)
+    })
 
-    // 1 =  Player 1, 2 = Plaer2, S = Server
-    // 1 Connected && save me=x -> S(x) ; S -> 2Connected (x) && me=o
-    // 2 if(serverSaysX){I am player o} || if serverSaysNothing -> S(x)
-
-    // 1 clicks -> S(click[x], turn) ; S-> 2(click[x])
-
-    // S(turn)->1/2 if(turn==x){turn(o)}else if(turn==o){turn(x)}
-
-    // Save myPlayer (x/o)
+    useEffect(() => {
+        console.log("Current",currentPlayer)
+    }, [currentPlayer]);
 
     const checkForWinner = (squares) => {
         let combos = {
@@ -55,7 +61,8 @@ function TicTacToe(){
     };
 
     const handleClick = (num) => {
-        // if(turn == me){
+        if(myId === currentPlayer){
+            socket.emit("nextTurn", myId)
             if (cells[num] !== '') {
                 setClicked(true);
                 setTimeout(() => {
@@ -76,9 +83,9 @@ function TicTacToe(){
     
             checkForWinner(squares);
             setCells(squares);
-        // }else{
-        //     console.log("Not your turn")
-        // }
+        }else{
+            console.log("Not your turn")
+        }
     };
 
     const handleRestart = () => {
@@ -119,6 +126,10 @@ function TicTacToe(){
                 clicked && <p>allReadyClicked</p>
             }
             <button onClick={() => handleRestart()}>Play Again</button>
+          <p>PlayerX: {players[0]}</p>
+          <p>PlayerO: {players[1]}</p>
+          <p>MyID: {myId}</p>
+          <p>Turn: {turn}</p>
         </div>
     )
 }
