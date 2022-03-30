@@ -31,7 +31,7 @@ body{
     @include flex();
     font-family: "Montserrat";
     color:white;
-    overflowX:hidden;
+    overflow-x:hidden;
     background:$oxford-blue;
 }
 
@@ -82,4 +82,18 @@ body{
     font-size: .4rem;
     color:gray;
     text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    align-items: center;
+    justify-content: center;
+}
+
+table td{
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
 }
