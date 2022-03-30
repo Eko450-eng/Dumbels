@@ -7,7 +7,7 @@ import Chatscreen from './components/Chatscreen'
 import Chatinput from './components/chatComponents/Chatinput'
 import MessageBox from './components/chatComponents/MessageBox'
 import TicTacToe from './components/miniGames/TicTacToe';
-// import SocketIOServer from './components/miniGames/SocketIOServer.js'
+import Uno from './components/miniGames/Uno';
 
 import './styles/main.css'
 
@@ -24,6 +24,7 @@ function App() {
           {/* <Route path="/chatInput" element={<Chatinput />}/> */}
           <Route path="/mes" element={<MessageBox />} />
           <Route path='/tic' element={<TicTacToe />} />
+          <Route path='/uno' element={<Uno />} />
           {/* <Route path='/server' element={<SocketIOServer />} /> */}
         </Routes>
       </BrowserRouter>

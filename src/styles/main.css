@@ -2,24 +2,14 @@
 * {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   font-family: "Montserrat";
   color: white;
   overflow-x: hidden;
@@ -30,22 +20,9 @@ body {
   border: none;
   outline: none;
   border-radius: 15px;
-  padding: .25rem;
-  margin-bottom: .5rem;
+  padding: 0.25rem;
+  margin-bottom: 0.5rem;
 }
-
-.inputField::-webkit-input-placeholder {
-  text-align: center;
-}
-
-.inputField:-ms-input-placeholder {
-  text-align: center;
-}
-
-.inputField::-ms-input-placeholder {
-  text-align: center;
-}
-
 .inputField::placeholder {
   text-align: center;
 }
@@ -55,17 +32,14 @@ body {
   outline: none;
   color: black;
   background: #c4c4c4;
-  padding: .5rem 2rem;
+  padding: 0.5rem 2rem;
   margin: 1rem;
   border-radius: 25px;
   cursor: pointer;
-  -webkit-transition-duration: .3s;
-          transition-duration: .3s;
+  transition-duration: 0.3s;
 }
-
 .btn:hover, .btn_invisible:hover {
-  -webkit-transform: scale(1.3);
-          transform: scale(1.3);
+  transform: scale(1.3);
 }
 
 .btn_invisible {
@@ -77,58 +51,31 @@ body {
 }
 
 .Welcome {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .Register Form {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .passWordInfoBox {
-  font-size: .4rem;
+  font-size: 0.4rem;
   color: gray;
   text-align: center;
 }
 
 .container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   width: 500px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 table td {
@@ -136,4 +83,41 @@ table td {
   width: 100px;
   height: 100px;
 }
+
+.cards {
+  width: 4.5rem;
+  height: 7rem;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+}
+
+.black {
+  background-color: black;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}
+
+.yellow {
+  color: black;
+  background-color: yellow;
+}
+
+.red {
+  background-color: red;
+}
+
+.PlayerHand {
+  display: flex;
+  margin: 1rem;
+}
+
 /*# sourceMappingURL=main.css.map */

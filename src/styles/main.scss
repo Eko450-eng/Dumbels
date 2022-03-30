@@ -97,3 +97,39 @@ table td{
     width: 100px;
     height: 100px;
 }
+
+.cards{
+    width:4.5rem;
+    height:7rem;
+    border-radius: 5px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:.5rem;
+}
+
+.black{
+    background-color:black;
+}
+
+.blue{
+    background-color:blue;
+}
+
+.green{
+    background-color:green;
+}
+
+.yellow{
+    color:black;
+    background-color:yellow;
+}
+
+.red{
+    background-color:red;
+}
+
+.PlayerHand{
+    display: flex;
+    margin: 1rem;
+}
