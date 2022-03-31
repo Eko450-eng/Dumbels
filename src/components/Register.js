@@ -6,31 +6,11 @@ import { Check, X } from 'tabler-icons-react';
 import db from './firebase/firebaseConfig'
 import bcrypt from 'bcryptjs'
 import { useState } from 'react'
-
-const useStyles = createStyles((theme) => ({
-    root: {
-        position: 'relative',
-        margin:'.5rem',
-    },
-
-    input: {
-        height: 'auto',
-        paddingTop: 18,
-    },
-
-    label: {
-        position: 'absolute',
-        pointerEvents: 'none',
-        fontSize: theme.fontSizes.xs,
-        paddingLeft: theme.spacing.sm,
-        paddingTop: theme.spacing.sm / 2,
-        zIndex: 1,
-    },
-}));
-
+import useStyles from './chatComponents/Styles'
 
 function Register(){
     const navigate = useNavigate()
+    const { classes } = useStyles()
     const form = useForm({
         initialValues:{
             userName: "",
@@ -60,7 +40,6 @@ function Register(){
         );
     }
 
-    const { classes } = useStyles();
 
     const number = (v) => v.match(/[0-9]/)
     const letter = (v) => v.match(/[a-z]/)
