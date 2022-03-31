@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 import '../../styles/main.css';
-const socket = io('http://127.0.0.1:3001')
 
 function TicTacToe(){
     const [cells, setCells] = useState(Array(9).fill(''));
@@ -13,14 +12,14 @@ function TicTacToe(){
     const [currentPlayer, setCurrentPlayer] = useState('');
     const [myRole, setMyRole] = useState('');
 
-    useEffect(() => {
-        socket.on("players", (players)=>setPlayers(players))
-        socket.on('myId', (id)=>setMyId(id))
-    }, []);
-    socket.on('currentPlayer', (player)=>{
-        setCurrentPlayer(player)
-    })
-    socket.on('roleAssigned', (role)=>setMyRole(role))
+    // useEffect(() => {
+    //     socket.on("players", (players)=>setPlayers(players))
+    //     socket.on('myId', (id)=>setMyId(id))
+    // }, []);
+    // socket.on('currentPlayer', (player)=>{
+    //     setCurrentPlayer(player)
+    // })
+    // socket.on('roleAssigned', (role)=>setMyRole(role))
 
     const checkForWinner = (squares) => {
         let combos = {
@@ -77,8 +76,8 @@ function TicTacToe(){
 
     const handleClick = (num) => {
         if(myId === currentPlayer){
-            socket.emit("nextTurn", myId)
-            socket.emit("clickedOn", [num, myId])
+            // socket.emit("nextTurn", myId)
+            // socket.emit("clickedOn", [num, myId])
 
             handleBoxes(num, myRole)
         }else{
@@ -91,10 +90,10 @@ function TicTacToe(){
         }
     };
 
-    socket.on("clickedOnThis",(num)=>{
-        let enemyRole = myRole == "x" ? "o" : "x"
-        handleBoxes(num, enemyRole)
-    })
+    // socket.on("clickedOnThis",(num)=>{
+    //     let enemyRole = myRole == "x" ? "o" : "x"
+    //     handleBoxes(num, enemyRole)
+    // })
 
     const handleRestart = () => {
         setWinner(null);

@@ -4,10 +4,6 @@ import { v4 as uuid } from 'uuid'
 
 function PlayerHand(props){
   const [num, setNum] = useState(props.num);
-  const [loaded, setLoaded] = useState(false);
-
-
-  console.log(num)
 
   const randomGen = (num) =>{
     return Math.floor(Math.random() * num);
@@ -17,12 +13,15 @@ function PlayerHand(props){
     setNum(old=>setNum(...old, old.pop()))
   }
 
-  return <div className="PlayerHand">
+    return <div className="PlayerHand">
            {
              num.map(i=>{
-               return <Cards key={uuid()} color={randomGen(4)} value={randomGen(25)}/>
+                 const thisColor = randomGen(4)
+                 const thisValue = randomGen(25)
+
+                 return <Cards key={uuid()} color={thisColor} value={thisValue}/>
              })
            }
-		 </div>
+        </div>
 }
 export default PlayerHand

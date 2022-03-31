@@ -106,6 +106,7 @@ table td{
     justify-content:center;
     align-items:center;
     margin:.5rem;
+    position: relative;
 }
 
 .black{
@@ -113,7 +114,7 @@ table td{
 }
 
 .blue{
-    background-color:blue;
+    background-color: blue;
 }
 
 .green{
@@ -127,6 +128,90 @@ table td{
 
 .red{
     background-color:red;
+}
+
+.cardValue{
+    width: 100%;
+    height: 100%;
+}
+
+.zero{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/0.png');
+}
+
+.one{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/1.png');
+}
+.two{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/2.png');
+}
+.three{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/3.png');
+}
+.four{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/4.png');
+}
+.five{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/5.png');
+}
+.six{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/6.png');
+}
+.seven{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/7.png');
+}
+.eight{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/8.png');
+}
+.nine{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/9.png');
+}
+.skip{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/skip.png');
+}
+.reverse{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/reverse.png');
+}
+.drawTwo{
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/drawTwo.png');
+}
+.drawFour{
+    background-color: rgba(0,0,0,0);
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/drawFour.png');
+}
+.wild{
+    background-color: rgba(0,0,0,0);
+    background-position: center;
+    background-size: cover;
+    background-image: url('./assets/wild.png');
 }
 
 .PlayerHand{

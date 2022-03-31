@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { io } from 'socket.io-client'
 import { useState, useEffect } from 'react'
 import Welcome from './components/Welcome'
 import Register from './components/Register'
@@ -8,8 +9,9 @@ import Chatinput from './components/chatComponents/Chatinput'
 import MessageBox from './components/chatComponents/MessageBox'
 import TicTacToe from './components/miniGames/TicTacToe';
 import Uno from './components/miniGames/Uno';
-
 import './styles/main.css'
+export const socket = io('http://127.0.0.1:3001')
+
 
 function App() {
 
@@ -31,7 +33,5 @@ function App() {
     </div>
   );
 }
-
-
 
 export default App;

@@ -3,9 +3,10 @@ const cors = require('cors');
 const http = require('http');
 const app = express()
 const { Server } = require('socket.io');
+const { unstable_HistoryRouter } = require('react-router-dom');
 app.use(cors())
 const server = http.createServer(app)
-const socketServer = new Server(server, {
+const io = new Server(server, {
   cors:{
     origin: "http://localhost:3000",
     methods: ["GET", "POST"]
@@ -17,56 +18,121 @@ let playerX = ''
 let playerO = ''
 let round = 0
 
-const checkTurn = (server, id)=>{
-}
+let unoRoom = [];
+// let cardsP1 = {
+//   amount:7,
+//   cards: [
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//   ]
+// }
+
+// let cardsP2 = {
+//   amount:7,
+//   cards: [
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//     [color, value],
+//   ]
+// }
+// let placedCard = [color, value]
 
 // Socketio interaction
-socketServer.on('connection', (socket)=>{
-  //Setting player roles
-  if(userAmount < 1){
-    playerX = socket.id
-    socket.emit("roleAssigned", "x")
+io.on('connection',socket=>{
+  console.log("Connected")
+  // UNO
+  if(unoRoom.length < 1 ){
+    socket.join("uno")
+    unoRoom.push(socket.id)
+    io.to(socket.id).emit("joinMsg", "You are player 1")
+    console.log("Player 1 joined")
+  }else if(unoRoom.length == 1){
+    socket.join("uno")
+    unoRoom.push(socket.id)
+    io.to(socket.id).emit("joinMsg", "You are player 2")
+    console.log("Player 2 joined")
   }else{
-    playerO = socket.id
-    socket.emit("roleAssigned", "o")
+    socket.emit("joinMsg", "Room is full")
+    console.log("Player 3 was ejected like a mofo")
   }
-  userAmount++
-
-  // Sending the clicked blocks
-  socket.on("clickedOn", (arg)=>{
-    let enemy = playerX == arg[1] ? playerO : playerX
-    socketServer.to(enemy).emit('clickedOnThis', arg[0])
-  })
-
-  //Sending playerlist and playerID
-  socketServer.emit("players", [playerX, playerO])
-  socket.emit("myId", socket.id)
-
-  // Checking whos turn it is
-    if((socket.id === playerX && round%2 === 0) || (socket.id === playerO && round%2 !== 0)){
-        socketServer.emit("currentPlayer", socket.id)
-    }
-
-  socket.on('nextTurn', (socket)=>{
-    round++
-    if(socket == playerX){
-        socketServer.emit("currentPlayer", playerO)
-    }else{
-        socketServer.emit("currentPlayer", playerX)
-    }
-  })
-
-
-    socket.on('disconnect', ()=>{
-        userAmount=userAmount-1
-    })
+  if(unoRoom.length == 2){
+    console.log(unoRoom)
+    io.to("uno").emit("fullyConnected", true)
+  }
 })
 
 
 
-socketServer.on('message', (msg)=>{
-  console.log("Message", msg)
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // //Tic tac toe
+    // //Setting player roles
+    // if(userAmount < 1){
+    //   playerX = socket.id
+    //   socket.emit("roleAssigned", "x")
+    // }else{
+    //   playerO = socket.id
+    //   socket.emit("roleAssigned", "o")
+    // }
+    // userAmount++
+
+    // // Sending the clicked blocks
+    // socket.on("clickedOn", (arg)=>{
+    //   let enemy = playerX == arg[1] ? playerO : playerX
+    //   io.to(enemy).emit('clickedOnThis', arg[0])
+    // })
+
+    // //Sending playerlist and playerID
+    // io.emit("players", [playerX, playerO])
+    // socket.emit("myId", socket.id)
+
+    // // Checking whos turn it is
+    // if((socket.id === playerX && round%2 === 0) || (socket.id === playerO && round%2 !== 0)){
+    //     io.emit("currentPlayer", socket.id)
+    // }
+
+    // socket.on('nextTurn', (socket)=>{
+    //   round++
+    //   if(socket == playerX){
+    //       io.emit("currentPlayer", playerO)
+    //   }else{
+    //       io.emit("currentPlayer", playerX)
+    //   }
+    // })
+
+    // socket.on('disconnect', ()=>{
+    //     userAmount=userAmount-1
+    // })
+
+
+// io.on('message', (msg)=>{
+//   console.log("Message", msg)
+// })
 
 // Connecting the server
-server.listen(3001)
+server.listen(3001, ()=>{
+  console.log("Running")
+})
