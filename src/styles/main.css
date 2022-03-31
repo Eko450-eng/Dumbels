@@ -16,17 +16,6 @@ body {
   background: #14213d;
 }
 
-.inputField {
-  border: none;
-  outline: none;
-  border-radius: 15px;
-  padding: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-.inputField::placeholder {
-  text-align: center;
-}
-
 .btn, .btn_invisible {
   border: none;
   outline: none;
@@ -41,7 +30,6 @@ body {
 .btn:hover, .btn_invisible:hover {
   transform: scale(1.3);
 }
-
 .btn_invisible {
   background: none;
   padding: 0rem;
@@ -82,6 +70,27 @@ table td {
   border: 1px solid black;
   width: 100px;
   height: 100px;
+}
+
+.Chatinput {
+  display: flex;
+}
+
+.full {
+  width: 100%;
+}
+
+.popup {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+.popup_hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+.popup_shown {
+  visibility: shown;
 }
 
 /*# sourceMappingURL=main.css.map */

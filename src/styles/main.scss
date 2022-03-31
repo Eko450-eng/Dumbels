@@ -35,15 +35,15 @@ body{
     background:$oxford-blue;
 }
 
-.inputField{
-    @include reset;
-    border-radius: 15px;
-    padding:.25rem;
-    margin-bottom: .5rem;
-    &::placeholder{
-        text-align: center;
-    }
-}
+// .inputField{
+//     @include reset;
+//     border-radius: 15px;
+//     padding:.25rem;
+//     margin-bottom: .5rem;
+//     &::placeholder{
+//         text-align: center;
+//     }
+// }
 
 .btn{
     @include reset;
@@ -57,16 +57,16 @@ body{
     &:hover{
         transform: scale(1.3);
     }
+    &_invisible{
+        @extend .btn;
+        background:none;
+        padding: 0rem;
+        color:white;
+        font-weight: bold;
+        font-size: 2rem;
+    }
 }
 
-.btn_invisible{
-    @extend .btn;
-    background:none;
-    padding: 0rem;
-    color:white;
-    font-weight: bold;
-    font-size: 2rem;
-}
 
 .Welcome{
     @include flex();
@@ -96,4 +96,25 @@ table td{
     border: 1px solid black;
     width: 100px;
     height: 100px;
+}
+
+.Chatinput{
+    display: flex;
+}
+
+.full{
+    width: 100%;
+}
+
+.popup{
+    position: fixed;
+    bottom:1rem;
+    right:1rem;
+    &_hidden{
+        visibility: hidden;
+        pointer-events:none;
+    }
+    &_shown{
+        visibility: shown;
+    }
 }
