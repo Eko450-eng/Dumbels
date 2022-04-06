@@ -1,10 +1,11 @@
 import { addDoc, collection } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword, updateCurrentUser } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
-import { Progress, Group, createStyles, Notification, PasswordInput, Select, TextInput, Box, Text, Center, Button, NumberInput } from '@mantine/core'
+import { Progress, Group, PasswordInput, Select, TextInput, Box, Text, Center, Button, NumberInput } from '@mantine/core'
 import { useForm, useInputState } from '@mantine/hooks';
 import { Check, X } from 'tabler-icons-react';
+import { NotificationsProvider, showNotification } from '@mantine/notifications'
 import db from './firebase/firebaseConfig'
-import bcrypt from 'bcryptjs'
 import { useState } from 'react'
 import useStyles from './chatComponents/Styles'
 
@@ -23,7 +24,6 @@ function Register(){
         },
     })
 
-    const [ success, setSuccess ] = useState(false)
     const [ password, setPassword ] = useInputState('')
     const [ pass, setPass ] = useInputState('')
 
@@ -46,28 +46,38 @@ function Register(){
     const upperCaseLetter = (v) => v.match(/[A-Z]/)
     const specialCharacter = (v) => v.match(/[$&+,:;=?@#|'<>.^*()%!-]/)
     const length = (v) => v.length > 7
+    const auth = getAuth()
 
     const handleSubmit = async(e) =>{
         if((password === pass) && number(password) && letter(password) && upperCaseLetter(password) && specialCharacter(password) && length(password)){
 
-        const pw = await bcrypt.hash(password, 10)
-            const docRef = addDoc(collection(db, 'users'), {
-                userName: e.userName,
-                firstName: e.firstName,
-                lastName: e.lastName,
-                age: e.age,
-                gender: e.gender,
-                email: e.email,
-                password: pw,
+            createUserWithEmailAndPassword(auth, e.email, password)
+                .then((userCredentials)=>{
+                    const user = userCredentials.user
+                    const docRef = addDoc(collection(db, 'users'), {
+                        uid: user.uid,
+                        userName: e.userName,
+                        firstName: e.firstName,
+                        lastName: e.lastName,
+                        age: e.age,
+                        gender: e.gender,
+                    }).then(updateCurrentUser({
+                        displayName: e.userName
+                    }))
+                })
+            form.reset()
+            showNotification({
+                title: "User created succesfully",
+                message: "Welcome on board"
             })
-            console.log(docRef)
-            setSuccess(true)
             setTimeout(()=>{
-                setSuccess(false)
-            },[2000])
-        // navigate('/')
+                navigate('/')
+            },[2500])
         }else{
-            console.log("Not the same password")
+            showNotification({
+                title: "Passwords dont match",
+                message: "Please confirm your password"
+            })
         }
     }
 
@@ -110,47 +120,44 @@ function Register(){
 
 
     return <div className="Register">
+             <NotificationsProvider>
              {/* Title */}
-             <form onSubmit={form.onSubmit((values)=>handleSubmit(values))}>
-                <TextInput {...form.getInputProps('userName')} label="Username" classNames={classes} required name="userName" type="text" placeholder="Username" />
-                <TextInput {...form.getInputProps('firstName')} label="First Name" classNames={classes} required name="firstName" type="text" placeholder="Firstname" />
-                <TextInput {...form.getInputProps('lastName')} label="Last Name" classNames={classes} required name="lastname" type="text" placeholder="Lastname" />
-                <NumberInput {...form.getInputProps('age')} label="Age" min="18" classNames={classes} required name="age" type="number" placeholder="Age" />
-                <Select {...form.getInputProps('gender')} label="Gender" classNames={classes} placeholder='Please choose a gender' data={['Male', 'Female', 'Other']} />
-                <TextInput {...form.getInputProps('email')} label="E-mail" classNames={classes} required name="E-Mail" type="email" placeholder="E-Mail" />
-                <Group spacing={5} grow mt="xs" mb="md">
-                    {bars}
-                </Group>
+                <form onSubmit={form.onSubmit((values)=>handleSubmit(values))}>
+                    <TextInput {...form.getInputProps('userName')} label="Username" classNames={classes} required name="userName" type="text" placeholder="Username" />
+                    <TextInput {...form.getInputProps('firstName')} label="First Name" classNames={classes} required name="firstName" type="text" placeholder="Firstname" />
+                    <TextInput {...form.getInputProps('lastName')} label="Last Name" classNames={classes} required name="lastname" type="text" placeholder="Lastname" />
+                    <NumberInput {...form.getInputProps('age')} label="Age" min="18" classNames={classes} required name="age" type="number" placeholder="Age" />
+                    <Select {...form.getInputProps('gender')} label="Gender" classNames={classes} placeholder='Please choose a gender' data={['Male', 'Female', 'Other']} />
+                    <TextInput {...form.getInputProps('email')} label="E-mail" classNames={classes} required name="E-Mail" type="email" placeholder="E-Mail" />
+                    <Group spacing={5} grow mt="xs" mb="md">
+                        {bars}
+                    </Group>
 
-                <PasswordInput
-                  value={password}
-                  {...form.getInputProps(password)}
-                  onChange={setPassword}
-                  placeholder="Your password"
-                  classNames={classes}
-                  className="full"
-                  required
-                />
+                    <PasswordInput
+                    value={password}
+                    {...form.getInputProps(password)}
+                    onChange={setPassword}
+                    placeholder="Your password"
+                    classNames={classes}
+                    className="full"
+                    required
+                    />
 
-                <PasswordInput
-                  value={pass}
-                  {...form.getInputProps(pass)}
-                  onChange={setPass}
-                  placeholder="Confirm your password"
-                  classNames={classes}
-                  className="full"
-                  required
-                />
-                <PasswordRequirement label="Same password" meets={(password == pass)} />
-                {checks}
+                    <PasswordInput
+                    value={pass}
+                    {...form.getInputProps(pass)}
+                    onChange={setPass}
+                    placeholder="Confirm your password"
+                    classNames={classes}
+                    className="full"
+                    required
+                    />
+                    <PasswordRequirement label="Same password" meets={(password == pass)} />
+                    {checks}
 
-                <Button type="submit">Register</Button>
-
-               <Notification className={`popup ${success ? 'popup_shown' : 'popup_hidden'}`} disallowClose icon={<Check size={20} />} color="green" title="Registration successfull">
-                    Your account has been registered
-                </Notification>
-
-            </form>
+                    <Button type="submit">Register</Button>
+                </form>
+             </NotificationsProvider>
             </div>
 }
 export default Register

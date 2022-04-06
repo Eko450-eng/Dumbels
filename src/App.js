@@ -1,11 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useState, useEffect } from 'react'
 import Welcome from './components/Welcome'
 import Register from './components/Register'
 import Login from './components/Login'
 import Chatscreen from './components/Chatscreen'
 import TicTacToe from './components/miniGames/TicTacToe';
-// import SocketIOServer from './components/miniGames/SocketIOServer.js'
 
 import './styles/main.css'
 

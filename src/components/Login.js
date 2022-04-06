@@ -1,47 +1,65 @@
-import { collection, doc, getDocs, query, where } from 'firebase/firestore'
-import { useEffect } from 'react'
-import bcrypt from 'bcryptjs'
-import db from './firebase/firebaseConfig'
+import { Button, PasswordInput, TextInput } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import { useInputState } from '@mantine/hooks'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import useStyles from './chatComponents/Styles'
+import { NotificationsProvider, showNotification } from '@mantine/notifications'
+import { useNavigate } from 'react-router-dom'
 
 function Login(){
+    const [ password, setPassword ] = useInputState('')
+    const auth = getAuth()
+    const navigate = useNavigate()
 
-  const loginVerify = async(name, pass) => {
-    const usersRef = collection(db, "users")
-    const q = query(usersRef, where('userName',"==",name))
-    const qs =  await getDocs(q)
-    if(qs.size > 0){
-        qs.forEach((doc)=>{
-          let u = doc.data()
-          bcrypt.compare(pass, u.password, function(err, res){
-            if(res){
-              return res
-            }
-            console.log("Error", err)
-          })
+    const { classes } = useStyles();
+    const form = useForm({
+        initialValues:{
+            email: "",
+            password: "",
+        }
+    })
+
+    const handleSubmit = (e) =>{
+      signInWithEmailAndPassword(auth, e.email, e.password)
+        .then((uc)=>{
+          const user = uc.user
+          setTimeout(()=>{
+            navigate('/')
+          },[1000])
         })
-    }else{
-      console.log("User not found")
+        showNotification({
+          title: "Logged in successfully",
+          message: `Welcome back `
+        })
+      navigate('/')
     }
-  }
-
-  const handleSubmit = async(e) =>{
-    e.preventDefault()
-    const verify = await loginVerify(e.target[0].value, e.target[1].value)
-    // if(loginVerify(e.target[0].value, e.target[1].value)){
-    //   console.log("Logged in")
-    // }else {
-    //   console.log("Failed")
-    // }
-  }
 
   return <div className="Login">
-		   <form onSubmit={handleSubmit}>
-             <label htmlFor="userName">Username</label>
-             <input required className="inputField" name="userName" type="text"/>
-             <label htmlFor="password">Password</label>
-             <input required className="inputField" name="password" type="password"/>
-             <input className="btn" type="submit" value="Login"/>
-           </form>
+           <NotificationsProvider>
+            <form onSubmit={handleSubmit}>
+                  <TextInput
+                    {...form.getInputProps('email')}
+                    label="Email"
+                    classNames={classes}
+                    required
+                    name="email"
+                    type="text"
+                    placeholder="E-Mail"
+                    mt="md"
+                  />
+
+                  <PasswordInput
+                  value={password}
+                  {...form.getInputProps(password)}
+                  onChange={setPassword}
+                  placeholder="Your password"
+                  classNames={classes}
+                  className="full"
+                  required
+                  />
+              <Button type="submit">Login</Button>
+            </form>
+           </NotificationsProvider>
 		 </div>
 }
 export default Login

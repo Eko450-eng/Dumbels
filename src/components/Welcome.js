@@ -1,41 +1,39 @@
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import { collection, onSnapshot, query } from 'firebase/firestore'
-import db from './firebase/firebaseConfig'
+import { getAuth, signOut } from 'firebase/auth'
+import ChatScreen from './Chatscreen'
 
 function Welcome(){
-  const navigate = useNavigate()
-  const [ users, setUsers ] = useState([])
+    const navigate = useNavigate()
+    const auth = getAuth()
+    const [ loggedIn, setLoggedIn ] = useState(true)
 
-  // Gets live list of users
-  const getUsers = async() =>{
-    const q = query(collection(db, 'users'))
-    const unsubscribe = onSnapshot(q, (qs) => {
-      setUsers([])
-      qs.forEach((doc)=>{
-        setUsers(old=>[...old, doc.data()])
-      })
+    auth.onAuthStateChanged(user=>{
+        if(auth.currentUser != null){
+            setLoggedIn(false)
+        }
     })
-  }
 
-  useEffect(()=>{
-    getUsers()
-  },[])
-
-  return <div className="Welcome">
-		   <h1>Dumbels</h1>
-           <button className="btn_invisible" onClick={()=>{
-             navigate('/register')
-           }}>Register</button>
-           <button className="btn_invisible" onClick={()=>{
-             navigate('/login')
-           }}>Login</button>
-           {
-             users.map(u=>{
-               return <p key={uuid()}>{u.userName}</p>
-             })
-           }
-		 </div>
+    return <div className="Welcome">
+            <h1>Dumbels</h1>
+            {!loggedIn && <p>Welcome back {auth.currentUser.displayName}</p>}
+             {loggedIn ?
+              <div>
+                <button className="btn_invisible" onClick={()=>{
+                    navigate('/register')
+                }}>Register</button>
+                <button className="btn_invisible" onClick={()=>{
+                    navigate('/login')
+                }}>Login</button>
+              </div> :
+              <div>
+                <button className="btn_invisible" onClick={()=>{
+                    navigate('/chat')
+                }}>Chat</button>
+                <Button onClick={()=>signOut(auth)}>Log out</Button>
+              </div>
+            }
+            </div>
 }
 export default Welcome
