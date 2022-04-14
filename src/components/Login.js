@@ -31,7 +31,6 @@ function Login(){
           title: "Logged in successfully",
           message: `Welcome back `
         })
-      navigate('/')
     }
 
   return <div className="Login">

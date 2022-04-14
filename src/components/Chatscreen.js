@@ -27,7 +27,7 @@ function Chatscreen(){
     return <div className="Chatscreen">
             {
                 messages.map(m=>{
-                    return <MessageBox key={uuid()} sender={m.sender} message={m.message} day={m.day} month={m.month} year={m.year} hour={m.hour} minute={m.minutes} avatar={m.avatar}/>
+                    return <MessageBox key={uuid()} sender={m.sender} message={m.message} day={m.day} month={m.month} year={m.year} hour={m.hour} minute={m.minute} avatar={m.avatar}/>
                 })
             }
             <Chatinput />

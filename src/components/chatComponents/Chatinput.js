@@ -1,16 +1,26 @@
 import { Button, TextInput } from "@mantine/core"
 import { useForm } from '@mantine/hooks'
 import db from '../firebase/firebaseConfig'
-import { addDoc, collection, Timestamp } from 'firebase/firestore'
+import { query, addDoc, collection, Timestamp, where, getDocs } from 'firebase/firestore'
 import { useState } from "react"
 import { getAuth } from 'firebase/auth'
 
 function Chatinput(){
     const auth = getAuth()
     const [ user, setUser ] = useState('')
+    const [ receiver, setReceiver ] = useState('')
 
-    auth.onAuthStateChanged(u=>{
-        setUser(u.displayName)
+
+    const checkUser = async(u) => {
+        const q = query(collection(db, "users"), where('uid', '==', u.uid))
+        const querySnapshot = await getDocs(q)
+        querySnapshot.forEach(doc=>{
+            setUser(doc.data().userName)
+        })
+    }
+
+    auth.onAuthStateChanged(async (u)=>{
+        checkUser(u)
     })
 
     const form = useForm({
@@ -22,8 +32,12 @@ function Chatinput(){
 
     const sendMessage = (v)=>{
         const month = new Date().getMonth() + 1
+        if(v.mes.startsWith("@")){
+            setReceiver(v.mes.replace('@','').split(' ')[0])
+            console.log(receiver)
+        }
         const docRef = addDoc(collection(db, 'mainChat'), {
-            sender: v.user,
+            sender: user,
             message: v.mes,
             timeStamp: Timestamp.now(),
             day: new Date().getDate().toString(),
