@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, updateCurrentUser } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 import { Progress, Group, PasswordInput, Select, TextInput, Box, Text, Center, Button, NumberInput } from '@mantine/core'
@@ -6,7 +6,6 @@ import { useForm, useInputState } from '@mantine/hooks';
 import { Check, X } from 'tabler-icons-react';
 import { NotificationsProvider, showNotification } from '@mantine/notifications'
 import db from './firebase/firebaseConfig'
-import { useState } from 'react'
 import useStyles from './chatComponents/Styles'
 
 function Register(){
@@ -48,38 +47,7 @@ function Register(){
     const length = (v) => v.length > 7
     const auth = getAuth()
 
-    const handleSubmit = async(e) =>{
-        if((password === pass) && number(password) && letter(password) && upperCaseLetter(password) && specialCharacter(password) && length(password)){
 
-            createUserWithEmailAndPassword(auth, e.email, password)
-                .then((userCredentials)=>{
-                    const user = userCredentials.user
-                    const docRef = addDoc(collection(db, 'users'), {
-                        uid: user.uid,
-                        userName: e.userName,
-                        firstName: e.firstName,
-                        lastName: e.lastName,
-                        age: e.age,
-                        gender: e.gender,
-                    }).then(updateCurrentUser({
-                        displayName: e.userName
-                    }))
-                })
-            form.reset()
-            showNotification({
-                title: "User created succesfully",
-                message: "Welcome on board"
-            })
-            setTimeout(()=>{
-                navigate('/')
-            },[2500])
-        }else{
-            showNotification({
-                title: "Passwords dont match",
-                message: "Please confirm your password"
-            })
-        }
-    }
 
     const requirements = [
         { re: /[0-9]/, label: 'Includes number' },
@@ -118,6 +86,72 @@ function Register(){
         />
         ));
 
+    const handleSubmit = async(e) =>{
+        let passCheck = (password === pass) && number(password) && letter(password) && upperCaseLetter(password) && specialCharacter(password) && length(password)
+
+        const docRef = doc(db, 'users', e.userName)
+        const docSnap = await getDoc(docRef)
+        if(docSnap.exists()){
+            console.log("Exists")
+            showNotification({
+                title: "Username is already taken",
+                message: "Wait? there's two of you?!",
+                icon: '😳',
+                color: 'red'
+            })
+            return
+        }else{
+            if(passCheck){
+                createUserWithEmailAndPassword(auth, e.email, password)
+                    .then((userCredentials)=>{
+                        const user = userCredentials.user
+                        setDoc(doc(db, "users", e.userName), {
+                            uid: user.uid,
+                            userName: e.userName,
+                            firstName: e.firstName,
+                            lastName: e.lastName,
+                            age: e.age,
+                            gender: e.gender,
+                            email: e.email
+                        }).then(
+                            updateCurrentUser({
+                            displayName: e.userName
+                        }))
+                    }).catch(error=>{
+                        switch(error.code){
+                        case 'auth/email-already-in-use' :
+                            showNotification({
+                                title: "Email Already in use",
+                                message: "Please use a different email adress",
+                                icon: <X/>,
+                                color: 'red'
+                            })
+                        }
+                        return
+                    })
+                    form.reset()
+                    showNotification({
+                        title: "User created succesfully",
+                        message: "Welcome on board",
+                        icon: <Check/>,
+                        color: 'green'
+                    })
+                console.log(auth.currentUser)
+                    setTimeout(()=>{
+                        navigate('/')
+                    },[2500])
+
+            }else if(password != pass){
+                showNotification({
+                    title: "Passwords dont match",
+                    message: "Please confirm your password",
+                    icon: <X/>,
+                    color: 'red'
+                })
+            }
+        }
+
+    }
 
     return <div className="Register">
              <NotificationsProvider>
@@ -160,4 +194,5 @@ function Register(){
              </NotificationsProvider>
             </div>
 }
+
 export default Register

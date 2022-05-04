@@ -9,6 +9,11 @@ function Welcome(){
     const auth = getAuth()
     const [ loggedIn, setLoggedIn ] = useState(true)
 
+    const logOut = () =>{
+        signOut(auth)
+        window.location.reload()
+    }
+
     auth.onAuthStateChanged(user=>{
         if(auth.currentUser != null){
             setLoggedIn(false)
@@ -31,9 +36,10 @@ function Welcome(){
                 <button className="btn_invisible" onClick={()=>{
                     navigate('/chat')
                 }}>Chat</button>
-                <Button onClick={()=>signOut(auth)}>Log out</Button>
+                <Button onClick={()=>logOut()}>Log out</Button>
               </div>
             }
             </div>
 }
+
 export default Welcome

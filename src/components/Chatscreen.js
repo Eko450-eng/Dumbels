@@ -32,5 +32,6 @@ function Chatscreen(){
             }
             <Chatinput />
         </div>
+
 }
 export default Chatscreen

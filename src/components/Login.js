@@ -5,13 +5,14 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import useStyles from './chatComponents/Styles'
 import { NotificationsProvider, showNotification } from '@mantine/notifications'
 import { useNavigate } from 'react-router-dom'
+import { AlertCircle, Check } from 'tabler-icons-react'
 
 function Login(){
     const [ password, setPassword ] = useInputState('')
     const auth = getAuth()
     const navigate = useNavigate()
-
     const { classes } = useStyles();
+
     const form = useForm({
         initialValues:{
             email: "",
@@ -19,23 +20,37 @@ function Login(){
         }
     })
 
-    const handleSubmit = (e) =>{
-      signInWithEmailAndPassword(auth, e.email, e.password)
+    const handleSubmit = async(e) =>{
+      console.log(password)
+      signInWithEmailAndPassword(auth, e.email, password)
         .then((uc)=>{
           const user = uc.user
+          console.log(user)
+          showNotification({
+            title: "Logged in successfully",
+            message: `Welcome back `,
+            icon: <Check/>,
+            color: "green"
+          })
           setTimeout(()=>{
             navigate('/')
           },[1000])
         })
-        showNotification({
-          title: "Logged in successfully",
-          message: `Welcome back `
+        .catch(e=>{
+          console.log(e.message)
+          showNotification({
+            title: `Please try again `,
+            message: "EMail and Password combination not registered",
+            icon: <AlertCircle/>,
+            color: "red"
+          })
         })
+      form.reset()
     }
 
   return <div className="Login">
            <NotificationsProvider>
-            <form onSubmit={handleSubmit}>
+             <form onSubmit={form.onSubmit(values=>handleSubmit(values))}>
                   <TextInput
                     {...form.getInputProps('email')}
                     label="Email"
@@ -48,14 +63,15 @@ function Login(){
                   />
 
                   <PasswordInput
-                  value={password}
-                  {...form.getInputProps(password)}
-                  onChange={setPassword}
-                  placeholder="Your password"
-                  classNames={classes}
-                  className="full"
-                  required
+                    value={password}
+                    {...form.getInputProps(password)}
+                    onChange={setPassword}
+                    placeholder="Your password"
+                    classNames={classes}
+                    className="full"
+                    required
                   />
+
               <Button type="submit">Login</Button>
             </form>
            </NotificationsProvider>
