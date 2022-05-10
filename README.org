@@ -1,0 +1,14 @@
+* What Dumbels offers
+** Chats
+Dumbels offers a main chat room where you can chat with multiple people at the same time and also enter private chats
+** Games
+We also offer a tiny collection of minigames that you can play with others directly on the page
+
+* To-Do
+  - [ ] Private Chat
+  - [ ] More user Settings
+  - [ ] Games
+  - [ ] Bug fixes
+  - [ ] Refactoring
+  - [ ] App Settings
+  - [ ] Styling
