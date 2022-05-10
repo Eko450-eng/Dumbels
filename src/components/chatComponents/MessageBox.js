@@ -3,31 +3,7 @@ import { collection, doc, getDoc, query } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import db from '../firebase/firebaseConfig'
 import { useState } from 'react'
-
-//Mantine section
-const useStyles = createStyles((theme)=>({
-    timeStamp: {
-        fontSize:8,
-        textAlign:"right",
-        padding: "5px"
-    },
-    user: {
-        justifyContent: "right",
-        textAlign:"right"
-    },
-    recipient: {
-        justifyContent: "left",
-        textAlign:"left"
-    },
-    bubble:{
-        background:"white",
-        color:"black",
-        paddingTop:"5px",
-        paddingBottom:"5px",
-        paddingInline:"10px",
-        borderRadius:"15px"
-    }
-}))
+import useStyles from '../Styles'
 
 function MessageBox({userName, sender, message, day, month, year, hour, minutes}){
     const { classes } = useStyles()

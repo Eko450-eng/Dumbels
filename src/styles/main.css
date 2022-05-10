@@ -13,7 +13,6 @@ body {
   font-family: "Montserrat";
   color: white;
   overflow-x: hidden;
-  background: #14213d;
 }
 
 .btn, .btn_invisible {
@@ -96,6 +95,10 @@ table td {
 .reverseOrder {
   display: flex;
   flex-direction: column-reverse;
+}
+
+Button {
+  margin: 10px;
 }
 
 /*# sourceMappingURL=main.css.map */
