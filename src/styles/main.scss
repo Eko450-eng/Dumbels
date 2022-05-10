@@ -118,3 +118,8 @@ table td{
         visibility: shown;
     }
 }
+
+.reverseOrder{
+    display:flex;
+    flex-direction: column-reverse;
+}
