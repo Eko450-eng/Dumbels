@@ -1,12 +1,13 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-import { getAuth, createUserWithEmailAndPassword, updateCurrentUser } from 'firebase/auth'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
-import { Progress, Group, PasswordInput, Select, TextInput, Box, Text, Center, Button, NumberInput } from '@mantine/core'
+import { PasswordInput, Select, TextInput, Box, Text, Center, Button, NumberInput } from '@mantine/core'
 import { useForm, useInputState } from '@mantine/hooks';
 import { Check, X } from 'tabler-icons-react';
 import { NotificationsProvider, showNotification } from '@mantine/notifications'
 import db from './firebase/firebaseConfig'
-import useStyles from './chatComponents/Styles'
+import useStyles from './Styles'
+import HomeButton from './Helpers/HomeButton'
 
 function Register(){
     const navigate = useNavigate()
@@ -22,7 +23,6 @@ function Register(){
             pass: ""
         },
     })
-
     const [ password, setPassword ] = useInputState('')
     const [ pass, setPass ] = useInputState('')
 
@@ -167,6 +167,7 @@ function Register(){
 
                     <Button type="submit">Register</Button>
                 </form>
+               <HomeButton/>
              </NotificationsProvider>
             </div>
 }

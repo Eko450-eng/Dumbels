@@ -32,7 +32,6 @@ body{
     font-family: "Montserrat";
     color:white;
     overflow-x:hidden;
-    background:$oxford-blue;
 }
 
 // .inputField{
@@ -122,4 +121,8 @@ table td{
 .reverseOrder{
     display:flex;
     flex-direction: column-reverse;
+}
+
+Button{
+    margin: 10px;
 }

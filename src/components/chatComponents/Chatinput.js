@@ -1,15 +1,16 @@
 import { Button, TextInput } from "@mantine/core"
 import { useForm } from '@mantine/hooks'
-import db from '../firebase/firebaseConfig'
 import { query, addDoc, collection, Timestamp, where, getDocs } from 'firebase/firestore'
 import { useState } from "react"
 import { getAuth } from 'firebase/auth'
+import db from '../firebase/firebaseConfig'
+import useStyles from '../Styles'
 
 function Chatinput(){
     const auth = getAuth()
+    const { classes } = useStyles()
     const [ user, setUser ] = useState('')
     const [ receiver, setReceiver ] = useState('')
-
 
     const checkUser = async(u) => {
         const q = query(collection(db, "users"), where('uid', '==', u.uid))
@@ -49,9 +50,9 @@ function Chatinput(){
         form.reset()
     }
 
-	return <form onSubmit={form.onSubmit((values)=>sendMessage(values))} className="Chatinput">
-             <TextInput {...form.getInputProps('mes')} className="messageBox" type="text" name="message" autoFocus={true} required={true} placeholder="Message..." maxLength={100} />
-            <Button type="submit">Send</Button>
+	return <form onSubmit={form.onSubmit((values)=>sendMessage(values))} className={classes.row}>
+             <TextInput {...form.getInputProps('mes')} className={classes.inputMessage} type="text" name="message" autoFocus={true} required={true} placeholder="Message..." maxLength={100} />
+             <Button type="submit" className={classes.sendButton}>Send</Button>
 		   </form>
 }
 export default Chatinput

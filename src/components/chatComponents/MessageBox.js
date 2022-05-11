@@ -1,37 +1,20 @@
-import { createStyles, Avatar, Text, Group } from '@mantine/core'
-import { collection, doc, getDoc, query } from 'firebase/firestore'
+import { createStyles, Avatar, Text, Group, Divider, Menu } from '@mantine/core'
+import { addDoc, collection, doc, getDoc, query, setDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import db from '../firebase/firebaseConfig'
 import { useState } from 'react'
-
-//Mantine section
-const useStyles = createStyles((theme)=>({
-    timeStamp: {
-        fontSize:8,
-        textAlign:"right",
-        padding: "5px"
-    },
-    user: {
-        justifyContent: "right",
-        textAlign:"right"
-    },
-    recipient: {
-        justifyContent: "left",
-        textAlign:"left"
-    },
-    bubble:{
-        background:"white",
-        color:"black",
-        paddingTop:"5px",
-        paddingBottom:"5px",
-        paddingInline:"10px",
-        borderRadius:"15px"
-    }
-}))
+import useStyles from '../Styles'
+import { ArrowsLeftRight, Hash, Trash } from 'tabler-icons-react'
+import { useDisclosure } from '@mantine/hooks'
+import { useNavigate } from 'react-router-dom'
+import { io } from 'socket.io-client'
+const socket = io('http://127.0.0.1:3001')
 
 function MessageBox({userName, sender, message, day, month, year, hour, minutes}){
+    const navigate = useNavigate()
     const { classes } = useStyles()
     const [ profilePic, setProfilePic ] = useState('')
+    const [ opened, handlers ] = useDisclosure(false)
 
     const cyear = new Date().getFullYear().toString()
     const monthCalc = new Date().getMonth() + 1
@@ -44,12 +27,36 @@ function MessageBox({userName, sender, message, day, month, year, hour, minutes}
         setProfilePic(snapShot.data().avatar)
     }
 
+    const sendInvite = async(user)=>{
+        const userNameSnap = await setDoc(doc(db, "invites", sender), {
+            receiver: sender,
+            sender: user,
+            message: " wants to play TikTakToe",
+        })
+    }
+
     getUser()
 
     return <div className="MessageBox">
                 <div>
                   <Group className={sender == userName ? classes.user : classes.recipient}>
-                      { sender != userName ? <Avatar src={profilePic} alt={'../styles/assets/avatarDef.png'} radius="xl" /> : null  }
+                    { sender != userName ?
+                      <Group>
+                        <Menu control={<Avatar src={profilePic} alt={'../styles/assets/avatarDef.png'} radius="xl" />} opened={opened} onOpen={handlers.open} onClose={handlers.close}>
+                          <Menu.Item
+                            color="green"
+                            icon={<Hash size={14} />}
+                            onClick={()=>{
+                                sendInvite(sender)
+                                socket.emit("closing", "hi")
+                                setTimeout(()=>{
+                                    navigate('/TikTakToe')
+                                },[250])
+                            }}
+                          >Invite to TikTakToe</Menu.Item>
+                        </Menu>
+                      </Group>
+                      : null  }
                         <div>
                           <Text size="xs" color="indigo">{sender != "" ? sender : "Deleted user"}</Text>
                           <Group className={classes.bubble}>

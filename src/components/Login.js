@@ -1,11 +1,12 @@
-import { Button, PasswordInput, TextInput } from '@mantine/core'
+import { Button, Group, PasswordInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useInputState } from '@mantine/hooks'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import useStyles from './chatComponents/Styles'
 import { NotificationsProvider, showNotification } from '@mantine/notifications'
 import { useNavigate } from 'react-router-dom'
 import { AlertCircle, Check } from 'tabler-icons-react'
+import HomeButton from './Helpers/HomeButton'
+import useStyles from './Styles'
 
 function Login(){
     const [ password, setPassword ] = useInputState('')
@@ -21,7 +22,6 @@ function Login(){
     })
 
     const handleSubmit = async(e) =>{
-      console.log(password)
       signInWithEmailAndPassword(auth, e.email, password)
         .then((uc)=>{
           const user = uc.user
@@ -72,8 +72,11 @@ function Login(){
                     required
                   />
 
-              <Button type="submit">Login</Button>
+               <Group className={classes.container}>
+                <Button type="submit">Login</Button>
+               </Group>
             </form>
+             <HomeButton/>
            </NotificationsProvider>
 		 </div>
 }
