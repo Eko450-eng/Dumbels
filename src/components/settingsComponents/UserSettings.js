@@ -1,4 +1,4 @@
-import { query, collection, where, getDocs, updateDoc, doc } from 'firebase/firestore'
+import { query, collection, where, getDocs, updateDoc, doc, onSnapshot } from 'firebase/firestore'
 import { getAuth, updatePassword } from 'firebase/auth'
 import { Avatar, Button, Center, Text, PasswordInput, TextInput, Box } from '@mantine/core'
 import { useEffect, useState } from 'react'
@@ -29,14 +29,23 @@ function UserSettings(){
         }
     })
 
-    const getUser=async()=>{
-        const emailRef = query(collection(db, "users"), where('email', '==', auth.currentUser.email))
-        const emailSnapshot = await getDocs(emailRef)
-        emailSnapshot.forEach(doc=>{
-            setDocName(doc.data().userName)
-            setProfilePic(doc.data().avatar)
-        })
+    const getUser = async(user)=>{
+        if(user != undefined){
+            const emailRef = query(collection(db, "users"), where('email', '==', (user)))
+            const unsubscribe = onSnapshot(emailRef, (doc)=>{
+                doc.forEach(doc=>{
+                    setDocName(doc.data().userName)
+                    setProfilePic(doc.data().avatar)
+                })
+            })
+        }
     }
+
+    useEffect(() => {
+        if(auth.currentUser != null){
+            getUser(auth.currentUser.email)
+        }
+    }, []);
 
     //Change Password
     const passwordChange = (e)=>{

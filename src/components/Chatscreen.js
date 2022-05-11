@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { query, collection, orderBy, onSnapshot, where, getDocs, limit } from 'firebase/firestore'
+import { query, collection, orderBy, onSnapshot, where, getDocs, limit, deleteDoc, doc } from 'firebase/firestore'
 import db from './firebase/firebaseConfig'
 import Chatinput from './chatComponents/Chatinput';
 import MessageBox from './chatComponents/MessageBox';
 import { v4 as uuid } from 'uuid'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { Button, Group } from '@mantine/core';
+import { Alert, Button, Group } from '@mantine/core';
 import HomeButton from './Helpers/HomeButton'
 import useStyles from './Styles'
+import { useNavigate } from 'react-router-dom';
+import { Hash } from 'tabler-icons-react';
 
 function Chatscreen(){
     const auth = getAuth()
@@ -16,6 +18,10 @@ function Chatscreen(){
     const [ userName, setUserName ] = useState('')
     const [ limitCount, setLimitCount ] = useState(10)
     const [ docName, setDocName ] = useState('')
+    const [ invite, setInvite ] = useState('')
+    const [ inviter, setInviter ] = useState('')
+    const [ noMessage, setNoMessage ] = useState(true)
+    const navigate = useNavigate()
 
     const checkEmail = async() =>{
         const emailRef = query(collection(db, "users"), where('email', '==', auth.currentUser.email))
@@ -35,10 +41,21 @@ function Chatscreen(){
         setLimitCount(v)
     }
 
+    const q = query(collection(db, 'invites'))
+    const sub = onSnapshot(q, (qs) => {
+        qs.forEach((doc)=>{
+            if(doc.data().receiver == userName){
+                setInvite(true)
+                setInviter(doc.data().sender)
+                const sender = doc.data().sender
+            }
+        })
+    })
+
     const getMessages = async() =>{
         const q = query(collection(db, 'mainChat'), orderBy("timeStamp", "desc"), limit(limitCount))
         const unsubscribe = onSnapshot(q, (qs) => {
-        setMessages([])
+            setMessages([])
             qs.forEach((doc)=>{
                 setMessages(old=>[...old, doc.data()])
             })
@@ -61,6 +78,8 @@ function Chatscreen(){
     window.scrollTo(0, document.body.scrollHeight)
 
     useEffect(()=>{
+        setInvite(false)
+        setInviter('')
         getUser()
     },[])
 
@@ -68,27 +87,41 @@ function Chatscreen(){
         getMessages()
     },[limitCount])
 
+    const acceptInvite = async() =>{
+        await deleteDoc(doc(db, "invites", userName))
+        navigate('/TikTakToe')
+    }
+
     return <div className="Chatscreen">
-             <Group className={classes.container}>
-               <Button onClick={()=>loadMore()} variant="subtle" radius="xl" size="xs">Load More</Button>
-             </Group>
-             <div className='reverseOrder'>
+            <Group className={classes.container}>
+            <Button onClick={()=>loadMore()} variant="subtle" radius="xl" size="xs">Load More</Button>
+            </Group>
+            <div className='reverseOrder'>
             {
                 messages.map(m=>{
                     return <MessageBox
-                             key={uuid()}
-                             userName={userName}
-                             sender={m.sender}
-                             message={m.message}
-                             day={m.day}
-                             month={m.month}
-                             year={m.year}
-                             hour={m.hour}
-                             minutes={m.minutes}
-                           />
+                            key={uuid()}
+                            userName={userName}
+                            sender={m.sender}
+                            message={m.message}
+                            day={m.day}
+                            month={m.month}
+                            year={m.year}
+                            hour={m.hour}
+                            minutes={m.minutes}
+                        />
                 })
             }
-             </div>
+            </div>
+            {invite &&
+                <div onClick={()=>{
+                    acceptInvite()
+                }}>
+                <Alert icon={<Hash size={16} />} title="Join!" color="green">
+                    Join the game
+                </Alert>
+                </div>
+            }
             <Chatinput />
             <HomeButton/>
         </div>
