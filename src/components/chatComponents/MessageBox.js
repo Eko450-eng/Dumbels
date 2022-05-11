@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth'
 import db from '../firebase/firebaseConfig'
 import { useState } from 'react'
 import useStyles from '../Styles'
-import { ArrowsLeftRight, Hash, Trash } from 'tabler-icons-react'
+import { ArrowsLeftRight, Hash, MessageCircle, Trash } from 'tabler-icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { useNavigate } from 'react-router-dom'
 import { io } from 'socket.io-client'
@@ -35,6 +35,15 @@ function MessageBox({userName, sender, message, day, month, year, hour, minutes}
         })
     }
 
+    const createNewChatRoom = async(person)=>{
+        const docRef = addDoc(collection(db, 'privateRooms'), {
+            participants: {
+                one: person,
+                two: userName
+            }
+        })
+    }
+
     getUser()
 
     return <div className="MessageBox">
@@ -43,6 +52,11 @@ function MessageBox({userName, sender, message, day, month, year, hour, minutes}
                     { sender != userName ?
                       <Group>
                         <Menu control={<Avatar src={profilePic} alt={'../styles/assets/avatarDef.png'} radius="xl" />} opened={opened} onOpen={handlers.open} onClose={handlers.close}>
+                          <Menu.Item
+                            color="green"
+                            icon={<MessageCircle size={14} />}
+                            onClick={()=>createNewChatRoom(sender)}
+                          >Start Private Chat</Menu.Item>
                           <Menu.Item
                             color="green"
                             icon={<Hash size={14} />}

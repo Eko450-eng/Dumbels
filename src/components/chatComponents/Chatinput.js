@@ -33,10 +33,6 @@ function Chatinput(){
 
     const sendMessage = (v)=>{
         const month = new Date().getMonth() + 1
-        if(v.mes.startsWith("@")){
-            setReceiver(v.mes.replace('@','').split(' ')[0])
-            console.log(receiver)
-        }
         const docRef = addDoc(collection(db, 'mainChat'), {
             sender: user,
             message: v.mes,

@@ -17,21 +17,12 @@ let playerX = ''
 let playerO = ''
 let round = 0
 
-const checkTurn = (server, id)=>{
-}
-
-// Socketio interaction
-
 socketServer.on('closing', (socket)=>{
   userAmount = 0
 })
 
-  const joining = (socket)=>{
-  }
-
 socketServer.on('connection', (socket)=>{
     //Setting player roles
-
   socket.on("joining", (wocket)=>{
     if(userAmount < 1){
       console.log("player 1")

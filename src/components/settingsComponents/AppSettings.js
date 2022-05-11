@@ -68,17 +68,9 @@ function AppSettings({bg, th, dn, lc, bs, pC}){
                             {...form.getInputProps('background')}
                         />
 
-                    {/* <TextInput */}
-                    {/*         value={pc} */}
-                    {/*         placeholder="Primary color" */}
-                    {/*         label="Your primary color" */}
-                    {/*         {...form.getInputProps('pc')} */}
-                    {/* /> */}
-
                     <Select
                         label="Theme"
                         placeholder="Theme"
-                        searchable
                         nothingFound="Please choose a valid option"
                         data={[
                             { value: 'dark', label: 'Dark' },
@@ -90,7 +82,6 @@ function AppSettings({bg, th, dn, lc, bs, pC}){
                     <Select
                         label="Your Primary Color"
                         placeholder="Primary Color"
-                        searchable
                         nothingFound="Please choose a valid option"
                         data={[
                             { value: 'green', label: 'Green' },
