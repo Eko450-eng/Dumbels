@@ -1,3 +1,5 @@
+* Dumbels
+[[https://dcifinalproject.web.app/]][Live demo (Without TikTakToe)]
 * What Dumbels offers
 ** Chats
 Dumbels offers a main chat room where you can chat with multiple people at the same time and also enter private chats
@@ -6,9 +8,3 @@ We also offer a tiny collection of minigames that you can play with others direc
 
 * To-Do
   - [ ] Private Chat
-  - [ ] More user Settings
-  - [ ] Games
-  - [ ] Bug fixes
-  - [ ] Refactoring
-  - [ ] App Settings
-  - [ ] Styling
