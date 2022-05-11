@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import '../../styles/main.css';
-const socket = io('http://127.0.0.1:3001')
+const socket = io('https://tranquil-basin-13357.herokuapp.com/')
 
 function TicTacToe(){
     const [cells, setCells] = useState(Array(9).fill(''));
