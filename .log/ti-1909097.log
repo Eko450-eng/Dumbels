@@ -1,0 +1,28 @@
+[09:01:14.958] Global cache location '/home/eko/.cache/typescript/4.7', safe file path '/usr/lib/node_modules/typescript/lib/typingSafeList.json', types map path /usr/lib/node_modules/typescript/lib/typesMap.json
+[09:01:14.975] Processing cache location '/home/eko/.cache/typescript/4.7'
+[09:01:14.975] Trying to find '/home/eko/.cache/typescript/4.7/package.json'...
+[09:01:15.011] Loaded content of '/home/eko/.cache/typescript/4.7/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.604"},"devDependencies":{"@types/dot":"^1.1.5","@types/react":"^18.0.15","@types/react-dom":"^18.0.5","@types/react-transition-group":"^4.4.5","@types/react-type-animation":"^1.1.1","@types/testing-library__jest-dom":"^5.14.5"}}
+[09:01:15.011] Loaded content of '/home/eko/.cache/typescript/4.7/package-lock.json'
+[09:01:15.023] Adding entry into typings cache: 'dot' => '/home/eko/.cache/typescript/4.7/node_modules/@types/dot/index.d.ts'
+[09:01:15.028] Adding entry into typings cache: 'react' => '/home/eko/.cache/typescript/4.7/node_modules/@types/react/index.d.ts'
+[09:01:15.031] Adding entry into typings cache: 'react-dom' => '/home/eko/.cache/typescript/4.7/node_modules/@types/react-dom/index.d.ts'
+[09:01:15.033] Adding entry into typings cache: 'react-transition-group' => '/home/eko/.cache/typescript/4.7/node_modules/@types/react-transition-group/index.d.ts'
+[09:01:15.034] Adding entry into typings cache: 'react-type-animation' => '/home/eko/.cache/typescript/4.7/node_modules/@types/react-type-animation/index.d.ts'
+[09:01:15.039] Adding entry into typings cache: 'testing-library__jest-dom' => '/home/eko/.cache/typescript/4.7/node_modules/@types/testing-library__jest-dom/index.d.ts'
+[09:01:15.039] Finished processing cache location '/home/eko/.cache/typescript/4.7'
+[09:01:15.039] Process id: 1909104
+[09:01:15.040] NPM location: /usr/local/bin/npm (explicit '--npmLocation' not  provided)
+[09:01:15.040] validateDefaultNpmLocation: false
+[09:01:15.040] Npm config file: /home/eko/.cache/typescript/4.7/package.json
+[09:01:15.040] Updating types-registry npm package...
+[09:01:15.040] Exec: /usr/local/bin/npm install --ignore-scripts types-registry@latest
+[09:01:16.511]     Succeeded. stdout:
+    
+    up to date, audited 28 packages in 1s
+
+3 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+[09:01:16.511] Updated types-registry npm package
